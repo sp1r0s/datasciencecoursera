@@ -6,5 +6,5 @@ pollutantmean <- function(directory, pollutant, id = 1:332) {
     currentFile <- read.csv(currentFileLocation, header=T, sep=",")
     pollutantVector <- c(pollutantVector, currentFile[, pollutant])
   }
-    round(mean(pollutantVector, na.rm=TRUE), 3)
+    return(round(mean(pollutantVector, na.rm=TRUE), 3))
 }

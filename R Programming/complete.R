@@ -8,5 +8,5 @@ complete <- function(directory, id = 1:332) {
     completeVector[counter] <- sum(complete.cases(currentFile))
     counter <- counter + 1
   }
-  data.frame(id = id, nobs = completeVector)
+  return(data.frame(id = id, nobs = completeVector))
 }
