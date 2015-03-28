@@ -22,29 +22,29 @@ rankall <- function(outcome, num = "best") {
   ## Change the outcome type to numeric for better results
   outcomeData[, 3] = as.numeric(outcomeData[, 3])
   
-  if(is.numeric(num) && num > nrow(outcomeData)) {
-      return(NA)
-  } else if(num == "best") {
-      return(best(state, outcome))
-      apply(outcomeData, 1, best, state = outcomeData$State, outcome = outcome)
-  } else if(num == "worst") {
-      ## Change the outcome type to numeric for better results
-      outcomeData[, 3] = as.numeric(outcomeData[, 3])
-    
-      ## Return hospital name in that state with highest 30-sday death rate
-      outcomeData = outcomeData[order(outcomeData[, 3], outcomeData$Hospital.Name), ]
-      return(outcomeData$Hospital.Name[nrow(outcomeData)])
-  } else {
-      ## Change the outcome type to numeric for better results
-      outcomeData[, 3] = as.numeric(outcomeData[, 3])
-    
-      ## Return hospital name in that state with highest 30-sday death rate
-      outcomeData = outcomeData[order(outcomeData[, 3], outcomeData$Hospital.Name), ]
-      return(outcomeData$Hospital.Name[num])
+  states <- outcomeData$State
+  states <- sort(unique(states))
   
-    ## For each state, find the hospital of the given rank
-    ## Return a data frame with the hospital names and the
-    ## (abbreviated) state name
-    return(apply(outcomeData, 1, rankhospital(), state = outcomeData$State, outcome = outcome, num = num))
+  hospitalsPerState <- NULL
+  
+  for (i in 1:length(states)) {
+    currentStateData <- outcomeData[outcomeData$State == states[i],]
+    a <- rank(currentStateData[, 3], na.last=NA)
+    
+    if (num=="best") {
+      r <- 1
+    } else if (num =="worst") {
+      r <- length(a)
+    } else if (num <= length(a) ) {
+      r <- num
+    } else {
+      r <- NA
+    }
+    if (is.na(r)) {
+      hospitalsPerState[i] <- NA
+    } else {
+      hospitalsPerState[i] <- currentStateData$Hospital.Name[order(currentStateData[, 3], currentStateData$Hospital.Name)[r]]
+    }
   }
+  return(data.frame(hospital=hospitalsPerState, state=states)) 
 }
