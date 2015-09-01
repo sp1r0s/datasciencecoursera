@@ -21,14 +21,16 @@ for iter = 1:num_iters
 	for i = 1:m
 		theta0Sum = theta0Sum + ( theta(1) + theta(2) * X(i, 2) - y(i, 1) );
 	endfor
-	theta(1) = theta(1) - alpha * 1/m * theta0Sum;
+	thetaZero = theta(1) - alpha * 1/m * theta0Sum;
 
 	theta1Sum = 0;	
-	for i= 1:m
+	for i = 1:m
 		theta1Sum = theta1Sum + ( theta(1) + theta(2) * X(i, 2) - y(i, 1) ) * X(i, 2);
 	endfor	
-	theta(2) = theta(2) - alpha * 1/m * theta1Sum;
+	thetaOne = theta(2) - alpha * 1/m * theta1Sum;
 
+	theta = [thetaZero; thetaOne];
+	
     % ============================================================
 
     % Save the cost J in every iteration    
