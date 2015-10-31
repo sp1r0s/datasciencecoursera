@@ -129,7 +129,7 @@ fprintf('\n');
 X2 = [1650 3];
 X2_norm = (X2 - mu) ./ sigma; % normalize features first
 X2_norm = [1 X2_norm]; % add first column of all-ones
-price = X2_norm * theta;
+price = X2_norm * theta5;
 
 
 % ============================================================
